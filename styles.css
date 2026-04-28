@@ -5,6 +5,16 @@
     box-sizing: border-box;
 }
 
+/* Ocultar scrollbar pero permitir scroll */
+html, body {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
 /* Capa 1: Fondo (z-index: 1) */
 body {
     min-height: 200vh; /* Permite hacer scroll */
@@ -17,6 +27,18 @@ body {
     overflow-x: hidden;
     position: relative;
     z-index: 1;
+}
+
+/* Nuevo Logo Fijo (z-index: 5) */
+.logo-fixed {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    max-width: 200px;
+    width: 90%;
+    height: auto;
 }
 
 /* Capa 2: Contenido (z-index: 2) */
@@ -33,12 +55,6 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 20px;
-}
-
-.logo {
-    max-width: 200px; /* Ajusta esto si el logo es muy grande/pequeño */
-    width: 100%;
-    height: auto;
 }
 
 h1 {
@@ -59,16 +75,17 @@ h1 {
     background-color: transparent;
 }
 
-/* Capa 4: Hint de Scroll (z-index: 4) */
+/* Capa 4: Hint de Scroll (z-index: 6) */
 .scroll-hint {
     position: fixed;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    width: 50px; /* Ajusta según el tamaño de la imagen del dedo */
+    width: 100px; /* Duplicado */
     height: auto;
-    z-index: 4;
+    z-index: 6; /* Actualizado z-index */
     animation: bounce 2s infinite ease-in-out;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3)); /* Sombra paralela sutil */
 }
 
 /* Animación de subida y bajada */
@@ -77,6 +94,6 @@ h1 {
         transform: translate(-50%, 0);
     }
     50% {
-        transform: translate(-50%, -15px);
+        transform: translate(-50%, -30px); /* Recorrido ampliado a 30px */
     }
 }

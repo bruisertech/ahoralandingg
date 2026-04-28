@@ -1,4 +1,12 @@
+// --- Force Top al Recargar ---
+if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Asegurarse de empezar en la parte superior siempre
+    window.scrollTo(0, 0);
+
     // --- 1. Lógica de Texto Multicolor Dinámico ---
     const textElement = document.getElementById('animated-text');
     if (textElement) {
@@ -15,14 +23,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Si es un espacio en blanco, lo agregamos sin envolver ni aumentar el contador
                 textElement.appendChild(document.createTextNode(char));
             } else {
-                // Si es un carácter, lo envolvemos en un span y le asignamos un color
+                // Si es un carácter, lo envolvemos en un span y le asignamos un color base inicial
                 const span = document.createElement('span');
                 span.textContent = char;
                 span.style.color = colors[colorIndex % colors.length];
+                span.classList.add('chameleon-char'); // Añadido para seleccionarlos en GSAP
                 textElement.appendChild(span);
 
                 colorIndex++; // Solo incrementamos el color si no fue un espacio
             }
+        }
+
+        // Animación GSAP Camaleón: Olas de colores infinitas
+        const spans = document.querySelectorAll('.chameleon-char');
+        if (spans.length > 0) {
+            // Animamos las letras a través del array completo de colores
+            gsap.to(spans, {
+                keyframes: colors.map(color => ({ color: color })),
+                duration: 5, // Aumentado ligeramente para que la transición completa de la paleta sea lenta
+                repeat: -1,
+                yoyo: true,
+                stagger: {
+                    each: 0.15,
+                    from: "start"
+                },
+                ease: "sine.inOut"
+            });
         }
     }
 
@@ -103,20 +129,29 @@ document.addEventListener('DOMContentLoaded', () => {
         paused: true // Lo pausamos para iniciarlo con ScrollTrigger sin scrub
     });
 
-    // ScrollTrigger para detectar el primer movimiento de scroll
+    // ScrollTrigger reversible para la animación
     ScrollTrigger.create({
         trigger: 'body',
-        start: 'top top',
-        end: '+=10', // Solo un pequeño movimiento
-        once: true, // Que solo ocurra una vez
+        start: 'top -5', // Dispara ligeramente después de hacer scroll hacia abajo
+        end: 'bottom bottom',
         onEnter: () => {
-            // Reproducir la animación de frames
+            // Reproducir la animación de frames (abrir)
             tl.play();
 
             // Ocultar el Hint (dedo)
             const hint = document.getElementById('scroll-hint');
             if (hint) {
                 gsap.to(hint, { autoAlpha: 0, duration: 0.5 });
+            }
+        },
+        onLeaveBack: () => {
+            // Revertir la animación de frames (cerrar)
+            tl.reverse();
+
+            // Mostrar el Hint de nuevo
+            const hint = document.getElementById('scroll-hint');
+            if (hint) {
+                gsap.to(hint, { autoAlpha: 1, duration: 0.5 });
             }
         }
     });
