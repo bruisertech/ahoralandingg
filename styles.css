@@ -61,11 +61,6 @@ h1 {
     font-size: clamp(1.5rem, 4vw, 3rem);
     line-height: 1.2;
     font-weight: 700;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25em; /* Spacing for the flex items */
 }
 
 /* Máscara animada para AHORA */
