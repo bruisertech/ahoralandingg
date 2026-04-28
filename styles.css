@@ -1,0 +1,82 @@
+/* Reseteo básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Capa 1: Fondo (z-index: 1) */
+body {
+    min-height: 200vh; /* Permite hacer scroll */
+    background-image: url('./fondo.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Mantiene el fondo fijo al scrollear */
+    background-repeat: no-repeat;
+    font-family: 'Fredoka', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+/* Capa 2: Contenido (z-index: 2) */
+.content-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    max-width: 200px; /* Ajusta esto si el logo es muy grande/pequeño */
+    width: 100%;
+    height: auto;
+}
+
+h1 {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+/* Capa 3: Canvas / Secuencia (z-index: 3) */
+#sequence-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 3;
+    background-color: transparent;
+}
+
+/* Capa 4: Hint de Scroll (z-index: 4) */
+.scroll-hint {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px; /* Ajusta según el tamaño de la imagen del dedo */
+    height: auto;
+    z-index: 4;
+    animation: bounce 2s infinite ease-in-out;
+}
+
+/* Animación de subida y bajada */
+@keyframes bounce {
+    0%, 100% {
+        transform: translate(-50%, 0);
+    }
+    50% {
+        transform: translate(-50%, -15px);
+    }
+}
