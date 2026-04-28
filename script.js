@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo(0, 0);
 
     // --- 1. Lógica de Texto Multicolor Dinámico ---
+    // --- 1. Lógica Camaleón (Texto + Máscara) ---
     const textElement = document.getElementById('animated-text');
     if (textElement) {
         const text = textElement.textContent;
@@ -22,6 +23,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (char.trim() === '') {
                 // Si es un espacio en blanco, lo agregamos sin envolver ni aumentar el contador
                 textElement.appendChild(document.createTextNode(char));
+        
+        // Obtenemos los nodos hijos antes de reconstruir
+        const childNodes = Array.from(textElement.childNodes);
+        textElement.innerHTML = ''; // Limpiamos el contenedor
+        
+        childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                // Si es un nodo de texto normal, aplicamos la lógica de envoltura de spans
+                const text = node.textContent;
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    if (char.trim() === '') {
+                        textElement.appendChild(document.createTextNode(char));
+                    } else {
+                        const span = document.createElement('span');
+                        span.textContent = char;
+                        span.style.color = colors[colorIndex % colors.length];
+                        span.classList.add('chameleon-char');
+                        textElement.appendChild(span);
+                        colorIndex++;
+                    }
+                }
             } else {
                 // Si es un carácter, lo envolvemos en un span y le asignamos un color base inicial
                 const span = document.createElement('span');
@@ -31,25 +54,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 textElement.appendChild(span);
 
                 colorIndex++; // Solo incrementamos el color si no fue un espacio
+                // Si es un nodo HTML (como nuestro div con la máscara), lo volvemos a añadir tal cual
+                textElement.appendChild(node);
             }
         }
+        });
 
         // Animación GSAP Camaleón: Olas de colores infinitas
+        // Animamos los spans de texto
         const spans = document.querySelectorAll('.chameleon-char');
         if (spans.length > 0) {
             // Animamos las letras a través del array completo de colores
             gsap.to(spans, {
                 keyframes: colors.map(color => ({ color: color })),
                 duration: 5, // Aumentado ligeramente para que la transición completa de la paleta sea lenta
+                duration: 5,
                 repeat: -1,
                 yoyo: true,
                 stagger: {
                     each: 0.15,
                     from: "start"
                 },
+                stagger: { each: 0.15, from: "start" },
                 ease: "sine.inOut"
             });
         }
+    }
+
+    // Animamos la máscara CSS de AHORA
+    const chameleonMask = document.querySelector('.ahora-camaleon');
+    if (chameleonMask) {
+        gsap.to(chameleonMask, {
+            backgroundPosition: "200% 0%",
+            duration: 10,
+            ease: "none",
+            repeat: -1
+        });
     }
 
     // --- 2. Canvas y Secuencia de Imágenes ---

@@ -61,6 +61,36 @@ h1 {
     font-size: clamp(1.5rem, 4vw, 3rem);
     line-height: 1.2;
     font-weight: 700;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25em; /* Spacing for the flex items */
+}
+
+/* Máscara animada para AHORA */
+.ahora-camaleon {
+    display: inline-block;
+    width: 200px; /* Dimensiones responsivas relativas al texto base */
+    height: 60px; /* Ajustar según proporciones de la imagen ahora.png */
+    
+    /* Degradado lineal multicolor extendido */
+    background-image: linear-gradient(to right, #F4943E, #F8CA5B, #8ECBCE, #F49DB5, #B893D6, #F4943E);
+    background-size: 300% 100%; /* Más ancho para poder animarlo */
+    background-position: 0% 0;
+    
+    /* Configuración de la máscara */
+    -webkit-mask-image: url('./ahora.png');
+    mask-image: url('./ahora.png');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    
+    /* Ajuste para que se vea bien dentro del H1 */
+    vertical-align: middle;
 }
 
 /* Capa 3: Canvas / Secuencia (z-index: 3) */
