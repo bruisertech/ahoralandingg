@@ -23,7 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const text = node.textContent;
                 for (let i = 0; i < text.length; i++) {
                     const char = text[i];
-                    if (char.trim() === '') {
+                    if (char === ' ') {
+                        // Usar espacio de no separación para evitar que flexbox lo colapse a 0 width
+                        textElement.appendChild(document.createTextNode('\u00A0'));
+                    } else if (char.trim() === '') {
+                        // Otros caracteres de espacio (tabulaciones, saltos de línea)
                         textElement.appendChild(document.createTextNode(char));
                     } else {
                         const span = document.createElement('span');
